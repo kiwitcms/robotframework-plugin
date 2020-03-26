@@ -15,9 +15,9 @@ setup(name='zealand',
       description='robotframework integration with kiwi TCMS',
       long_description=LONG_DESCRIPTION,
       maintainer='Aniello Barletta',
-      maintainer_email='aniello.barletta@staff.aruba.it',
+      maintainer_email='aniellob@gmail.com',
       license='LGPLv2+',
-      url='https://gitlab.aruba.it/e-security/esects/zealand',
+      url='https://github.com/shadeimi/zealand',
       python_requires='>=3.6',
           install_requires=[] + (
         ["winkerberos"] if sys.platform.startswith("win") else ["kerberos"]
