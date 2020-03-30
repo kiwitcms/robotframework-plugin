@@ -9,6 +9,9 @@ with open("README.rst") as readme:
     LONG_DESCRIPTION = readme.read()
 
 
+REQUIREMENTS = open('requirements.txt').readlines()
+
+
 setup(name='zealand',
       version='1.0.4',
       packages=['zealand', 'zealand.tcms_api'],
@@ -18,10 +21,7 @@ setup(name='zealand',
       maintainer_email='aniellob@gmail.com',
       license='LGPLv2+',
       url='https://github.com/shadeimi/zealand',
-      python_requires='>=3.6',
-          install_requires=[] + (
-        ["winkerberos"] if sys.platform.startswith("win") else ["kerberos"]
-        ),
+      install_requires=REQUIREMENTS,
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',
