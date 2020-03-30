@@ -16,3 +16,20 @@ doc8:
 .PHONY: build
 build:
 	./tests/check-build
+
+.PHONY: integration_test
+integration_test:
+	if [ -z $$(which geckodriver) ]; then \
+	    pip install -q -U webdrivermanager; \
+	    sudo webdrivermanager firefox --linkpath /usr/local/bin; \
+	fi
+
+	[ -d WebDemo ] || git clone --depth=1 https://github.com/robotframework/WebDemo.git
+
+	pip install -q -U -r WebDemo/requirements.txt
+	# demo web app is running at http://localhost:7272
+	python WebDemo/demoapp/server.py >/dev/null 2>&1 &
+
+	@sleep 2
+	PYTHONPATH=. robot -N ITS --listener zealand.listener.KiwiTCMS -d WebDemo/ WebDemo/login_tests/ tests/
+	@killall -9 -q -u $$(whoami) python
