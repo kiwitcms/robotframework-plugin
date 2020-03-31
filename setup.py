@@ -2,33 +2,35 @@
 # coding: utf-8
 # pylint: disable=missing-docstring
 from setuptools import setup
-import sys
 
 
 with open("README.rst") as readme:
     LONG_DESCRIPTION = readme.read()
 
 
-setup(name='zealand',
-      version='1.0.4',
-      packages=['zealand', 'zealand.tcms_api'],
+REQUIREMENTS = open('requirements.txt').readlines()
+
+
+setup(name='kiwitcms-robotframework-plugin',
+      version='0.0.0',
+      packages=['zealand'],
       description='robotframework integration with kiwi TCMS',
       long_description=LONG_DESCRIPTION,
-      maintainer='Aniello Barletta',
-      maintainer_email='aniellob@gmail.com',
-      license='LGPLv2+',
-      url='https://github.com/shadeimi/zealand',
-      python_requires='>=3.6',
-          install_requires=[] + (
-        ["winkerberos"] if sys.platform.startswith("win") else ["kerberos"]
-        ),
+      long_description_content_type="text/x-rst",
+      author='Aniello Barletta',
+      author_email='aniellob@gmail.com',
+      maintainer='Kiwi TCMS',
+      maintainer_email='info@kiwitcms.org',
+      url='https://github.com/kiwitcms/robotframework-plugin',
+      license='GPLv3+',
+      install_requires=REQUIREMENTS,
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Console',
           'Intended Audience :: Developers',
           'Intended Audience :: System Administrators',
-          'License :: OSI Approved :: GNU Lesser General Public License v2' +
-          ' or later (LGPLv2+)',
+          'License :: OSI Approved :: GNU General Public License v3' +
+          ' or later (GPLv3+)',
           'Operating System :: POSIX',
           'Programming Language :: Python',
           'Programming Language :: Python :: 3.6',
