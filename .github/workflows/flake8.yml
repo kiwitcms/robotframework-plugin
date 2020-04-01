@@ -1,0 +1,35 @@
+on:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - "*"
+
+jobs:
+  test-on-linux:
+    name: flake8 / Py${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.6]
+
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Python dependencies
+      run: |
+        sudo apt-get install virtualenv libkrb5-dev
+        pip install -r devel.txt
+
+    - name: Verify flake8
+      run: |
+        make flake8
