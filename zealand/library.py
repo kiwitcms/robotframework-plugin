@@ -4,7 +4,7 @@ import datetime
 import tcms_api
 
 
-class zealandLibrary:
+class ZealandLibrary:
 
     _shared_state = {}
 
@@ -33,7 +33,7 @@ class zealandLibrary:
             'BLOCKED': 6,
             'ERROR': 7,
             'WAIVED': 8}
-        self.NOW = datetime.datetime.now().isoformat().replace('T', ' ')[:19]
+        self.now = datetime.datetime.now().isoformat().replace('T', ' ')[:19]
         self.set_test_case_statuses()
         self.set_priority()
         self.set_products()
@@ -79,18 +79,18 @@ class zealandLibrary:
         executor_id = ''
         if executor != []:
             executor_id = executor[0]['id']
-        targetPlan = self.rpc_client.TestPlan.filter({'id': self.plan_id})[0]
+        target_plan = self.rpc_client.TestPlan.filter({'id': self.plan_id})[0]
         test_run = self.rpc_client.TestRun.create({
-            'start_date': datetime.datetime.strptime(self.NOW,
+            'start_date': datetime.datetime.strptime(self.now,
                                                      '%Y-%m-%d %H:%M:%S'),
-            'plan': targetPlan['id'],
+            'plan': target_plan['id'],
             'product': self.products.get(self.product),
-            'manager': targetPlan['author_id'],
+            'manager': target_plan['author_id'],
             'default_tester': executor_id if not '' else None,
-            'product_version': targetPlan['product_version_id'],
-            'type': targetPlan['type'],
+            'product_version': target_plan['product_version_id'],
+            'type': target_plan['type'],
             'build':  self.builds.get(self.product),
-            'summary': targetPlan['name'],
+            'summary': target_plan['name'],
             'notes': notes
         })
         self.test_run_id = test_run['id']
@@ -129,7 +129,8 @@ class zealandLibrary:
         test_category = tags['category']
         test_case_run = self.rpc_client.TestExecution.filter(
             {'run_id': self.test_run_id, 'case_id': test_id})
-        if(test_case_run):
+
+        if test_case_run:
             test_case_to_update = {
                 'execution_id': test_case_run[0]['id'],
                 'status': test_status,
@@ -138,7 +139,7 @@ class zealandLibrary:
                 'case_id': test_id,
                 'jid': tags['jid']
             }
-            self.update_testExecutions(test_case_to_update)
+            self.update_test_executions(test_case_to_update)
         else:
             # FIXME:: NON FUNZIONA CORRETTAMENTE
             is_already_proposed = self.rpc_client.TestCase.filter({
@@ -146,18 +147,19 @@ class zealandLibrary:
                 'id': test_id,
                 'case_status': self.test_case_statuses.get('PROPOSED')
             })
-            if(is_already_proposed != []):
+            if is_already_proposed != []:
                 self.add_proposed_test_to_run(
                     test_doc, test_name, test_category)
 
-    def update_testExecutions(self, updated_test):
+    def update_test_executions(self, updated_test):
         test_list = []
-        for t in self.rpc_client.TestRun.get_cases(self.test_run_id):
-            if t['execution_id'] == updated_test['execution_id']:
-                test_list.append(t)
+        for execution in self.rpc_client.TestRun.get_cases(self.test_run_id):
+            if execution['execution_id'] == updated_test['execution_id']:
+                test_list.append(execution)
 
+        # what is x ?
         x = list({v['id']: v for v in test_list}.values())
-        if(x == []):
+        if x == []:
             self.rpc_client.TestExecution.update(
                 updated_test['execution_id'],
                 {'status': self.test_exec_statuses.get('WAIVED')})
@@ -165,7 +167,7 @@ class zealandLibrary:
                 updated_test['execution_id'],
                 'Test not executed and updated with Waived status')
         else:
-            if(x[0]['status'] == 'IDLE'):
+            if x[0]['status'] == 'IDLE':
                 new_status = self.test_exec_statuses.get(
                     updated_test['status'])
                 self.rpc_client.TestExecution.update(
@@ -185,7 +187,7 @@ class zealandLibrary:
             self.test_run_id) if t['is_automated'] is not True]
         if not manual_test:
             stop_date = datetime.datetime.strptime(
-                self.NOW, '%Y-%m-%d %H:%M:%S')
+                self.now, '%Y-%m-%d %H:%M:%S')
             if jenkins_tag is not None:
                 self.rpc_client.TestRun.add_tag(self.test_run_id, jenkins_tag)
             self.rpc_client.TestRun.update(
