@@ -1,0 +1,3 @@
+*.py    text
+*.rst   text
+*       text=auto
