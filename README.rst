@@ -31,4 +31,4 @@ Usage
 
 ::
 
-    robot --listener zealand.zealandListener.py
+    robot --listener zealand.listener.KiwiTCMS
