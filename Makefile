@@ -4,9 +4,7 @@ flake8:
 
 .PHONY: pylint
 pylint:
-	PYTHONPATH=. pylint --extension-pkg-whitelist=kerberos \
-	                    -d missing-docstring -d duplicate-code \
-	                    zealand/ tests/
+	PYTHONPATH=. pylint -d missing-docstring *.py zealand/ tests/
 
 test:
 	coverage run --source tcms_api setup.py test
