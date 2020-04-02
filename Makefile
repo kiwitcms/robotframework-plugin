@@ -9,6 +9,10 @@ pylint:
 test:
 	coverage run --source tcms_api setup.py test
 
+.PHONY: doc8
+doc8:
+	doc8 README.rst
+
 .PHONY: build
 build:
 	./tests/check-build
