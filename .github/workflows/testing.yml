@@ -9,13 +9,14 @@ on:
       - "*"
 
 jobs:
-  flake8:
-    name: flake8 / Py${{ matrix.python-version }}
+  static_analysis:
+    name: ${{ matrix.make-command }} / Py${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         python-version: [3.6]
+        make-command: [doc8, flake8, pylint]
 
     steps:
 
@@ -32,33 +33,6 @@ jobs:
         sudo apt-get install virtualenv libkrb5-dev
         pip install -r devel.txt
 
-    - name: Verify flake8
+    - name: Verify ${{ matrix.make-command }}
       run: |
-        make flake8
-
-  pylint:
-    name: pylint / Py${{ matrix.python-version }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        python-version: [3.6]
-
-    steps:
-
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install Python dependencies
-      run: |
-        sudo apt-get install virtualenv libkrb5-dev
-        pip install -r devel.txt
-
-    - name: Verify pylint
-      run: |
-        make pylint
+        make ${{ matrix.make-command }}
