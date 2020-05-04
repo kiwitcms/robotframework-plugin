@@ -1,6 +1,26 @@
 Robot Framework plugin for Kiwi TCMS
 ====================================
 
+.. image:: https://img.shields.io/pypi/v/kiwitcms-tap-plugin.svg
+    :target: https://pypi.org/project/kiwitcms-robotframework-plugin
+    :alt: PyPI version
+
+.. image:: https://pyup.io/repos/github/kiwitcms/robotframework-plugin/shield.svg
+    :target: https://pyup.io/repos/github/kiwitcms/robotframework-plugin/
+    :alt: Python updates
+
+.. image:: https://img.shields.io/badge/kiwi%20tcms-results-9ab451.svg
+    :target: https://tcms.kiwitcms.org/plan/290/
+    :alt: TP for kiwitcms/robotframework-plugin (master)
+
+.. image:: https://tidelift.com/badges/package/pypi/kiwitcms-robotframework-plugin
+    :target: https://tidelift.com/subscription/pkg/pypi-kiwitcms-robotframework-plugin?utm_source=pypi-kiwitcms-robotframework-plugin&utm_medium=github&utm_campaign=readme
+    :alt: Tidelift
+
+.. image:: https://img.shields.io/twitter/follow/KiwiTCMS.svg
+    :target: https://twitter.com/KiwiTCMS
+    :alt: Kiwi TCMS on Twitter
+
 This package allows you execute your *Robot Framework* test suite and report the
 results into `Kiwi TCMS <http://kiwitcms.org>`_.
 
