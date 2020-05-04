@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [3.6]
-        make-command: [doc8, flake8, pylint]
+        make-command: [doc8, flake8, pylint, integration_test]
 
     steps:
 
@@ -33,6 +33,38 @@ jobs:
         sudo apt-get install virtualenv libkrb5-dev
         pip install -r devel.txt
 
+    - name: Prepare for integration test
+      if: matrix.make-command == 'integration_test'
+      run: |
+        echo "[tcms]" > ~/.tcms.conf
+        echo "url = https://tcms.kiwitcms.org/xml-rpc/" >> ~/.tcms.conf
+        echo "username = kiwitcms-bot" >> ~/.tcms.conf
+        echo "password = ${{ secrets.TCMS_PASSWORD }}" >> ~/.tcms.conf
+
+        # Ubuntu doesn't like the CA which signs our server certificates
+        sudo cp .ssl/*.pem /usr/lib/ssl/certs/
+        sudo update-ca-certificates --fresh
+
+        pip install robotframework-seleniumlibrary
+
+        if [ -z `which firefox` ]; then
+            sudo apt-get install firefox
+        fi
+
+        if [ -z `which geckodriver` ]; then
+            sudo apt-get install firefox-geckodriver
+        fi
+
     - name: Verify ${{ matrix.make-command }}
       run: |
+        export TCMS_PRODUCT=$GITHUB_REPOSITORY
+        # branch name or pull/123
+        export TCMS_PRODUCT_VERSION=$(echo $GITHUB_REF | sed "s|refs/heads/||" | sed "s|refs/||" | sed "s|/merge||")
+        # short commit number
+        export TCMS_BUILD=$(echo $GITHUB_SHA | cut -c1-7)
+
+        echo "************* GITHUB CI VARIABLES"
+        export
+        echo "========== END =========="
+
         make ${{ matrix.make-command }}
