@@ -155,3 +155,13 @@ then instruct Robot Framework to use the overriden listener instead of the
 default one::
 
     robot --listener path/to/acme_tools.py
+
+
+Changelog
+---------
+
+v1.0.0 (04 May 2020)
+~~~~~~~~~~~~~~~~~~~~
+
+- Initial release
+- Original implementation by Aniello Barletta
