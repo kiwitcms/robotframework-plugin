@@ -1,4 +1,4 @@
-name: Build & check packages for PyPI
+name: pypi
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-on-linux:
-    name: Build for PyPI / Py${{ matrix.python-version }} / ${{ matrix.os }}
+    name: build / Py${{ matrix.python-version }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
