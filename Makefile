@@ -31,5 +31,7 @@ integration_test:
 	python WebDemo/demoapp/server.py >/dev/null 2>&1 &
 
 	@sleep 2
+	# use Headless Firefox in CI
+	[ -z "$$DISPLAY" ] && sed -i "s/Firefox/Headless Firefox/" WebDemo/login_tests/*.robot
 	PYTHONPATH=. robot -N ITS --listener zealand.listener.KiwiTCMS -d WebDemo/ WebDemo/login_tests/ tests/
 	@killall -9 -q -u $$(whoami) python
