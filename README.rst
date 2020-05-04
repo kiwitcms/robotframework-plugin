@@ -1,7 +1,7 @@
 Robot Framework plugin for Kiwi TCMS
 ====================================
 
-.. image:: https://img.shields.io/pypi/v/kiwitcms-tap-plugin.svg
+.. image:: https://img.shields.io/pypi/v/kiwitcms-robotframework-plugin.svg
     :target: https://pypi.org/project/kiwitcms-robotframework-plugin
     :alt: PyPI version
 
