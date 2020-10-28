@@ -30,7 +30,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        sudo apt-get install virtualenv libkrb5-dev
+        sudo apt-get install virtualenv
         pip install -r devel.txt
 
     - name: Verify package build
