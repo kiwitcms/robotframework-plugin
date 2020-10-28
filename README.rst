@@ -160,6 +160,14 @@ default one::
 Changelog
 ---------
 
+
+v1.1.0 (28 Oct 2020)
+~~~~~~~~~~~~~~~~~~~~
+
+- Update tcms-api to 8.6.0
+- Update robotframework to 3.2.2
+
+
 v1.0.0 (04 May 2020)
 ~~~~~~~~~~~~~~~~~~~~
 
