@@ -160,6 +160,12 @@ default one::
 Changelog
 ---------
 
+v9.0 (13 Jan 2020)
+~~~~~~~~~~~~~~~~~~
+
+- Compatible with Kiwi TCMS v9.0
+- Update tcms-api to 9.0
+
 
 v1.1.0 (28 Oct 2020)
 ~~~~~~~~~~~~~~~~~~~~
