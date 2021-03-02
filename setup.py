@@ -12,7 +12,7 @@ REQUIREMENTS = open('requirements.txt').readlines()
 
 
 setup(name='kiwitcms-robotframework-plugin',
-      version='9.0',
+      version='10.0',
       packages=['zealand'],
       description='robotframework integration with kiwi TCMS',
       long_description=LONG_DESCRIPTION,
