@@ -30,7 +30,6 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        sudo apt-get install virtualenv
         pip install -U pip
         pip install -r devel.txt
 
