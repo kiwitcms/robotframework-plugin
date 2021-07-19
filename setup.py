@@ -8,7 +8,8 @@ with open("README.rst") as readme:
     LONG_DESCRIPTION = readme.read()
 
 
-REQUIREMENTS = open('requirements.txt').readlines()
+with open('requirements.txt') as requirements_file:
+    REQUIREMENTS = requirements_file.readlines()
 
 
 setup(name='kiwitcms-robotframework-plugin',
