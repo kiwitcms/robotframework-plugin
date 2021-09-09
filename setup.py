@@ -4,11 +4,11 @@
 from setuptools import setup
 
 
-with open("README.rst") as readme:
+with open("README.rst", encoding="utf-8") as readme:
     LONG_DESCRIPTION = readme.read()
 
 
-with open('requirements.txt') as requirements_file:
+with open('requirements.txt', encoding="utf-8") as requirements_file:
     REQUIREMENTS = requirements_file.readlines()
 
 
