@@ -189,17 +189,17 @@ class KiwiTCMS:
         test_case_id = test_case['id']
 
         self.backend.add_test_case_to_plan(test_case_id, self.backend.plan_id)
-        test_execution_id = self.backend.add_test_case_to_run(
-            test_case_id,
-            self.backend.run_id)
-
         comment = attrs['message'] or \
             'Result recorded via kiwitcms-robotframework-plugin'
         status_id = self.backend.get_status_id(attrs['status'])
 
-        self.backend.update_test_execution(test_execution_id,
-                                           status_id,
-                                           comment)
+        for execution in self.backend.add_test_case_to_run(
+            test_case_id,
+            self.backend.run_id,
+        ):
+            self.backend.update_test_execution(execution["id"],
+                                               status_id,
+                                               comment)
 
     def end_suite(self, name, attrs):  # pylint: disable=unused-argument
         """
