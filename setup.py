@@ -13,7 +13,7 @@ with open('requirements.txt', encoding="utf-8") as requirements_file:
 
 
 setup(name='kiwitcms-robotframework-plugin',
-      version='10.0',
+      version='11.0',
       packages=['zealand'],
       description='robotframework integration with kiwi TCMS',
       long_description=LONG_DESCRIPTION,
