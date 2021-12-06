@@ -149,7 +149,7 @@ class KiwiTCMS:
 
     def __init__(self):
         self.suite = None
-        self.backend = self.backend_class(prefix='[RF] ')
+        self.backend = self.backend_class(prefix='[RF]')
 
     def start_suite(self, name, attrs):  # pylint: disable=unused-argument
         """
