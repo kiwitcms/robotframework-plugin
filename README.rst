@@ -160,6 +160,15 @@ default one::
 Changelog
 ---------
 
+v11.0 (06 Dec 2021)
+~~~~~~~~~~~~~~~~~~~
+
+- Forward compatible with upcomint Kiwi TCMS v11.0
+- Update robotframework from 3.2.2 to 4.1.2
+- Update tcms-api from 10.0 to 11.0
+- Pylint fixes
+
+
 v10.0 (02 Mar 2021)
 ~~~~~~~~~~~~~~~~~~~
 
