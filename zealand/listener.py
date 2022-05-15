@@ -4,12 +4,16 @@ from xmlrpc.client import ProtocolError
 from robot.libraries.BuiltIn import BuiltIn
 from tcms_api.plugin_helpers import Backend
 
+from .version import __version__
+
 
 class RFBackend(Backend):
     """
         Kiwi TCMS plugin backend which has richer integration with
         Robot Framework internals than standard backend!
     """
+    name = "kiwitcms-robotframework-plugin"
+    version = __version__
     built_in = BuiltIn()
     cwd = os.getcwd() + os.sep
 
@@ -122,8 +126,7 @@ class RFBackend(Backend):
                 attrs['longname'])
 
         if created:
-            notes = attrs['suite']['doc'] or \
-                'Created by kiwitcms-robotframework-plugin'
+            notes = attrs['suite']['doc'] or self.created_by_text
 
             self.rpc.TestCase.update(
                 test_case['id'],
@@ -202,8 +205,7 @@ class KiwiTCMS:
         test_case_id = test_case['id']
 
         self.backend.add_test_case_to_plan(test_case_id, self.backend.plan_id)
-        comment = attrs['message'] or \
-            'Result recorded via kiwitcms-robotframework-plugin'
+        comment = attrs['message'] or self.backend.created_by_text
         status_id = self.backend.get_status_id(attrs['status'])
 
         for execution in self.backend.add_test_case_to_run(
