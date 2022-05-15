@@ -161,10 +161,19 @@ default one::
 Changelog
 ---------
 
+v11.2 (15 May 2022)
+~~~~~~~~~~~~~~~~~~~
+
+- Update robotframework from 4.1.2 to 5.0
+- Update tcms-api from 11.0 to 11.2
+- Ignore 403 errors when searching for user by email
+- Created records are annotated with plugin name and version
+
+
 v11.0 (06 Dec 2021)
 ~~~~~~~~~~~~~~~~~~~
 
-- Forward compatible with upcomint Kiwi TCMS v11.0
+- Forward compatible with upcoming Kiwi TCMS v11.0
 - Update robotframework from 3.2.2 to 4.1.2
 - Update tcms-api from 10.0 to 11.0
 - Pylint fixes
