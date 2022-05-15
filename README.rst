@@ -52,7 +52,8 @@ Each RF suite may define the following variables:
   changes! If subsequent test scenarios, aka .robot files don't override
   ``plan_id`` the current one will be used!
 - **${product}**: Existing product name when creating a new TestPlan
-- **${build_user_email}**: Email for an existing user
+- **${build_user_email}**: Email for an existing user,
+  override with ``TCMS_DEFAULT_TESTER_ID``!
 
 .. warning::
 

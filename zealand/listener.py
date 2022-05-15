@@ -1,5 +1,6 @@
 import os
 
+from xmlrpc.client import ProtocolError
 from robot.libraries.BuiltIn import BuiltIn
 from tcms_api.plugin_helpers import Backend
 
@@ -12,21 +13,33 @@ class RFBackend(Backend):
     built_in = BuiltIn()
     cwd = os.getcwd() + os.sep
 
+    @property
     def default_tester_id(self):
         """
-            If ${build_user_email} is specified witin the suite then use it,
-            otherwise default to the user connecting via API!
+            If ${build_user_email} is specified within the suite then use it!
+
+            .. warning::
+
+                Searching users via email requires ``auth.view_user``! See
+                https://kiwitcms.readthedocs.io/en/latest/admin.html?highlight=auth.view_user#managing-permissions
+                If this permission is not assigned to the user performing the
+                API request you may try defining the ``TCMS_DEFAULT_TESTER_ID``
+                environment variable instead!
         """
-        user_email = self.built_in.get_variable_value('${build_user_email}')
         result = None
+        user_email = self.built_in.get_variable_value('${build_user_email}')
 
         if user_email:
-            result = self.rpc.User.filter({'email': user_email})
+            try:
+                result = self.rpc.User.filter({'email': user_email})
+            except ProtocolError as err:
+                if err.errcode != 403:
+                    raise
 
         if result:
             return result[0]['id']
 
-        return super().default_tester_id()
+        return super().default_tester_id
 
     def external_plan_id(self):
         """
