@@ -1,2 +1,2 @@
-robotframework==6.0.1
+robotframework==6.0.2
 tcms-api==11.4
