@@ -9,9 +9,10 @@ from .version import __version__
 
 class RFBackend(Backend):
     """
-        Kiwi TCMS plugin backend which has richer integration with
-        Robot Framework internals than standard backend!
+    Kiwi TCMS plugin backend which has richer integration with
+    Robot Framework internals than standard backend!
     """
+
     name = "kiwitcms-robotframework-plugin"
     version = __version__
     built_in = BuiltIn()
@@ -20,36 +21,36 @@ class RFBackend(Backend):
     @property
     def default_tester_id(self):
         """
-            If ${build_user_email} is specified within the suite then use it!
+        If ${build_user_email} is specified within the suite then use it!
 
-            .. warning::
+        .. warning::
 
-                Searching users via email requires ``auth.view_user``! See
-                https://kiwitcms.readthedocs.io/en/latest/admin.html?highlight=auth.view_user#managing-permissions
-                If this permission is not assigned to the user performing the
-                API request you may try defining the ``TCMS_DEFAULT_TESTER_ID``
-                environment variable instead!
+            Searching users via email requires ``auth.view_user``! See
+            https://kiwitcms.readthedocs.io/en/latest/admin.html?highlight=auth.view_user#managing-permissions
+            If this permission is not assigned to the user performing the
+            API request you may try defining the ``TCMS_DEFAULT_TESTER_ID``
+            environment variable instead!
         """
         result = None
-        user_email = self.built_in.get_variable_value('${build_user_email}')
+        user_email = self.built_in.get_variable_value("${build_user_email}")
 
         if user_email:
             try:
-                result = self.rpc.User.filter({'email': user_email})
+                result = self.rpc.User.filter({"email": user_email})
             except ProtocolError as err:
                 if err.errcode != 403:
                     raise
 
         if result:
-            return result[0]['id']
+            return result[0]["id"]
 
         return super().default_tester_id
 
     def external_plan_id(self):
         """
-            If existing ${plan_id} is specified witin the suite then use it!
+        If existing ${plan_id} is specified witin the suite then use it!
         """
-        plan_id = self.built_in.get_variable_value('${plan_id}')
+        plan_id = self.built_in.get_variable_value("${plan_id}")
         if plan_id:
             return int(plan_id)
 
@@ -57,52 +58,55 @@ class RFBackend(Backend):
 
     def get_product_id(self, plan_id):
         """
-            If existing ${product} is specified witin the suite then use it.
-            Otherwise fall back to discovering the name from the environment!
+        If existing ${product} is specified witin the suite then use it.
+        Otherwise fall back to discovering the name from the environment!
         """
-        product_name = self.built_in.get_variable_value('${product}')
+        product_name = self.built_in.get_variable_value("${product}")
         if product_name:
-            result = self.rpc.Product.filter({'name': product_name})
+            result = self.rpc.Product.filter({"name": product_name})
             if result:
-                return result[0]['id'], product_name
+                return result[0]["id"], product_name
 
         return super().get_product_id(plan_id)
 
     def test_run_update(self, attrs):
         """
-            Update the currently active TestRun with more information coming
-            out from the Robot Framework test suite.
+        Update the currently active TestRun with more information coming
+        out from the Robot Framework test suite.
         """
-        self.rpc.TestRun.update(self.run_id, {
-            'notes': attrs['doc'],
-        })
+        self.rpc.TestRun.update(
+            self.run_id,
+            {
+                "notes": attrs["doc"],
+            },
+        )
 
     def rf_test_case_get_or_create(self, attrs):
         """
-            A richer version of Backend.test_case_get_or_create() which
-            allows searching for existing test cases in different ways:
+        A richer version of Backend.test_case_get_or_create() which
+        allows searching for existing test cases in different ways:
 
-                1. use pre-existing TestCase if specified in the .robot file
-                2. try searching by TC.script && TC.arguments matching the
-                   .robot file and test name
-                3. search by summary if nothing else works
+            1. use pre-existing TestCase if specified in the .robot file
+            2. try searching by TC.script && TC.arguments matching the
+               .robot file and test name
+            3. search by summary if nothing else works
 
-            Then update the TestCase in DB with more information we can
-            obtain from Robot Framework.
+        Then update the TestCase in DB with more information we can
+        obtain from Robot Framework.
         """
         created = False
         test_case = None
-        source_file = attrs['suite']['source'].replace(self.cwd, '')
+        source_file = attrs["suite"]["source"].replace(self.cwd, "")
 
         # search by explicitly specified pre-existing TestCase
-        for tag in attrs['tags']:
+        for tag in attrs["tags"]:
             tag = tag.lower()
-            if tag.startswith('tc-'):
+            if tag.startswith("tc-"):
                 try:
-                    test_case_id = int(tag.replace('tc-', ''))
+                    test_case_id = int(tag.replace("tc-", ""))
 
                     # see if this exists in the DB
-                    result = self.rpc.TestCase.filter({'pk': test_case_id})
+                    result = self.rpc.TestCase.filter({"pk": test_case_id})
                     if result:
                         test_case = result[0]
                     break
@@ -111,30 +115,31 @@ class RFBackend(Backend):
 
         # search by TC.script
         if test_case is None:
-            result = self.rpc.TestCase.filter({
-                'is_automated': True,
-                'script': source_file,
-                'arguments': attrs['name'],
-                'category__product': self.product_id,
-            })
+            result = self.rpc.TestCase.filter(
+                {
+                    "is_automated": True,
+                    "script": source_file,
+                    "arguments": attrs["name"],
+                    "category__product": self.product_id,
+                }
+            )
             if result:
                 test_case = result[0]
 
         # search or create by summary if everything else didn't work
         if test_case is None:
-            test_case, created = super().test_case_get_or_create(
-                attrs['longname'])
+            test_case, created = super().test_case_get_or_create(attrs["longname"])
 
         if created:
-            notes = attrs['suite']['doc'] or self.created_by_text
+            notes = attrs["suite"]["doc"] or self.created_by_text
 
             self.rpc.TestCase.update(
-                test_case['id'],
+                test_case["id"],
                 {
-                    'text': attrs['doc'],
-                    'notes': notes,
-                    'script': source_file,
-                    'arguments': attrs['name'],
+                    "text": attrs["doc"],
+                    "notes": notes,
+                    "script": source_file,
+                    "arguments": attrs["name"],
                 },
             )
 
@@ -145,16 +150,16 @@ class RFBackend(Backend):
         # we should make the inherited method add the status if missing
         # b/c after v8.0 statuses can be customized
         name = {
-            'PASS': 'PASSED',
-            'FAIL': 'FAILED',
+            "PASS": "PASSED",
+            "FAIL": "FAILED",
         }[name]
         return super().get_status_id(name)
 
 
 class KiwiTCMS:
     """
-        Listener class for Robot Framework which can be passed to
-        `robot --listener`
+    Listener class for Robot Framework which can be passed to
+    `robot --listener`
     """
 
     backend_class = RFBackend
@@ -165,16 +170,16 @@ class KiwiTCMS:
 
     def __init__(self):
         self.suite = None
-        self.backend = self.backend_class(prefix='[RF]')
+        self.backend = self.backend_class(prefix="[RF]")
 
     def start_suite(self, name, attrs):  # pylint: disable=unused-argument
         """
-            If a pre-existing TP was specified then create a TR for it,
-            possibly creating multiple TRs if various suites specify different
-            TPs. Otherwise create a new TP + TR to collect the results.
+        If a pre-existing TP was specified then create a TR for it,
+        possibly creating multiple TRs if various suites specify different
+        TPs. Otherwise create a new TP + TR to collect the results.
         """
         # skip test suites with empty test list b/c we don't want empty TRs
-        if not attrs['tests']:
+        if not attrs["tests"]:
             return
 
         external_plan_id = self.backend.external_plan_id()
@@ -196,36 +201,36 @@ class KiwiTCMS:
         self.suite = attrs
 
     def end_test(self, name, attrs):  # pylint: disable=unused-argument
-        attrs.update({
-            'name': name,
-            'suite': self.suite,
-        })
+        attrs.update(
+            {
+                "name": name,
+                "suite": self.suite,
+            }
+        )
 
         test_case, _ = self.backend.rf_test_case_get_or_create(attrs)
-        test_case_id = test_case['id']
+        test_case_id = test_case["id"]
 
         self.backend.add_test_case_to_plan(test_case_id, self.backend.plan_id)
-        comment = attrs['message'] or self.backend.created_by_text
-        status_id = self.backend.get_status_id(attrs['status'])
+        comment = attrs["message"] or self.backend.created_by_text
+        status_id = self.backend.get_status_id(attrs["status"])
 
         for execution in self.backend.add_test_case_to_run(
             test_case_id,
             self.backend.run_id,
         ):
-            self.backend.update_test_execution(execution["id"],
-                                               status_id,
-                                               comment)
+            self.backend.update_test_execution(execution["id"], status_id, comment)
 
     def end_suite(self, name, attrs):  # pylint: disable=unused-argument
         """
-            A suite ends so call finish_test_run().
+        A suite ends so call finish_test_run().
 
-            If there are more suites which report their results within
-            the same TR this will be called multiple times changing
-            TR.stop_date every time.
+        If there are more suites which report their results within
+        the same TR this will be called multiple times changing
+        TR.stop_date every time.
 
-            If we're actually reporting the results to multiple TRs then
-            each one of them will be finished accordingly.
+        If we're actually reporting the results to multiple TRs then
+        each one of them will be finished accordingly.
         """
         if self.backend.run_id:
             self.backend.finish_test_run()
