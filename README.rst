@@ -161,6 +161,16 @@ default one::
 Changelog
 ---------
 
+v12.7 (10 Dec 2023)
+~~~~~~~~~~~~~~~~~~~
+
+- Update robotframework from 5.0 to 6.1.1
+- Update tcms-api from 11.2 to 12.7
+- Relax ``tcms-api`` dependency to be ``>=``. Closes
+  `Issue #63 <https://github.com/kiwitcms/robotframework-plugin/issues/63>`_
+- Build and test with Python 3.11
+
+
 v11.2 (15 May 2022)
 ~~~~~~~~~~~~~~~~~~~
 
