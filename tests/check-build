@@ -69,7 +69,7 @@ echo "..... Trying to install the new tarball inside a virtualenv"
 $(which python) -m venv .venv/test-tarball
 source .venv/test-tarball/bin/activate
 pip install --upgrade setuptools pip
-pip install --no-binary :all: dist/kiwitcms-robotframework-plugin*.tar.gz
+pip install --no-binary :all: dist/kiwitcms*.tar.gz
 pip freeze | grep kiwitcms-robotframework-plugin
 deactivate
 rm -rf .venv/
@@ -78,7 +78,7 @@ echo "..... Trying to install the new wheel inside a virtualenv"
 $(which python) -m venv .venv/test-wheel
 source .venv/test-wheel/bin/activate
 pip install --upgrade setuptools pip
-pip install --only-binary :all: dist/kiwitcms_robotframework_plugin*.whl
+pip install --only-binary :all: dist/kiwitcms*.whl
 pip freeze | grep kiwitcms-robotframework-plugin
 deactivate
 rm -rf .venv/
