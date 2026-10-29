@@ -46,7 +46,7 @@ setup(
         "Intended Audience :: System Administrators",
         "Operating System :: POSIX",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Software Development",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Quality Assurance",
